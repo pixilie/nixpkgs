@@ -1,30 +1,38 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  typing ? null,
+  fetchFromGitHub,
   aiohttp,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp-cors";
   version = "0.8.1";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-zKz5y4S2STnqFfhZoUavH2Yqax1oF1dUoHMV4wX7FAM=";
+  src = fetchFromGitHub {
+    owner = "aio-libs";
+    repo = "aiohttp-cors";
+    tag = "v${version}";
+    hash = "sha256-AbMuUeCNM8+oZj/hutG3zxHOwYN8uZlLFBeYTlu1fh4=";
   };
 
-  disabled = pythonOlder "3.5";
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ aiohttp ] ++ lib.optional (pythonOlder "3.5") typing;
+  dependencies = [
+    aiohttp
+  ];
 
-  # Requires network access
-  doCheck = false;
+  pythonImportsCheck = [ "aiohttp_cors" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
+    changelog = "https://github.com/aio-libs/aiohttp-cors/blob/${src.tag}/CHANGES.rst";
     description = "CORS support for aiohttp";
     homepage = "https://github.com/aio-libs/aiohttp-cors";
     license = licenses.asl20;
