@@ -5,23 +5,27 @@
   pytest,
   pyvirtualdisplay,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-xvfb";
   version = "3.1.1";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "pytest_xvfb";
+    inherit version;
     hash = "sha256-kFk2NEJ9l0snLoRXk+RTP1uCfJ2EwFGHkBNiRQQXXkQ=";
   };
 
+  build-system = [ setuptools ];
+
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ pyvirtualdisplay ];
+  dependencies = [ pyvirtualdisplay ];
 
   meta = with lib; {
     description = "Pytest plugin to run Xvfb for tests";
