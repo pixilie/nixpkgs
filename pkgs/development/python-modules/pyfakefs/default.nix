@@ -26,22 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-flRX7jzGcGnTzvbieCJ+z8gL+2HpJbwKTTsK8y0cmc4=";
   };
 
-  postPatch =
-    ''
-      # test doesn't work in sandbox
-      substituteInPlace pyfakefs/tests/fake_filesystem_test.py \
-        --replace "test_expand_root" "notest_expand_root"
-      substituteInPlace pyfakefs/tests/fake_os_test.py \
-        --replace "test_path_links_not_resolved" "notest_path_links_not_resolved" \
-        --replace "test_append_mode_tell_linux_windows" "notest_append_mode_tell_linux_windows"
-    ''
-    + (lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # this test fails on darwin due to case-insensitive file system
-      substituteInPlace pyfakefs/tests/fake_os_test.py \
-        --replace "test_rename_dir_to_existing_dir" "notest_rename_dir_to_existing_dir"
-    '');
-
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "pyfakefs" ];
 
@@ -50,6 +35,19 @@ buildPythonPackage rec {
     pytestCheckHook
     undefined
   ];
+
+  pytestFlagsArray = [
+    "pyfakefs/tests"
+  ];
+
+  disabledTests =
+    [
+      "test_expand_root"
+    ]
+    ++ (lib.optionals stdenv.hostPlatform.isDarwin [
+      # this test fails on darwin due to case-insensitive file system
+      "test_rename_dir_to_existing_dir"
+    ]);
 
   meta = with lib; {
     description = "Fake file system that mocks the Python file system modules";
