@@ -31,6 +31,17 @@ buildPythonPackage rec {
     googleapis-common-protos
   ];
 
+  pytestFlagsArray = [
+    # pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
+  disabledTests = [
+    # ModuleNotFoundError: No module named 'google.type'
+    "test_unwrapped_enum_fields"
+  ];
+
   pythonImportsCheck = [ "proto" ];
 
   meta = with lib; {
