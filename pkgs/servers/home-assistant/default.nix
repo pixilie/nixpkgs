@@ -393,7 +393,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.3.4";
+  hassVersion = "2025.4.0";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -414,13 +414,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-g1t9xAjrSSePyAloTQ2qwxAGEXJUTWX2zIZmAvlGGa8=";
+    hash = "sha256-AEJQueoHLp6xRFYVQ9cwSMFvlgwrMGJ1JUMnosk2qHg=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-MIh8FMTKZVEZ/zC+Av8fykTpz9kkXgZZfnsuOZbgP0M=";
+    hash = "sha256-wflwLkqTXaBh1flSVNJcA5KChipRCzZD7nb7VaK2EPM=";
   };
 
   build-system = with python.pkgs; [
@@ -498,20 +498,27 @@ python.pkgs.buildPythonApplication rec {
     cronsim
     cryptography
     fnv-hash-fast
+    ha-ffmpeg
     hass-nabucasa
     home-assistant-bluetooth
+    home-assistant-intents
     httpx
     ifaddr
     jinja2
     lru-dict
+    mutagen
+    numpy
     orjson
     packaging
     pillow
     propcache
     psutil-home-assistant
     pyjwt
+    pymicro-vad
     pyopenssl
+    pyspeex-noise
     python-slugify
+    pyturbojpeg
     pyyaml
     requests
     securetar
@@ -525,7 +532,9 @@ python.pkgs.buildPythonApplication rec {
     voluptuous
     voluptuous-openapi
     voluptuous-serialize
+    webrtc-models
     yarl
+    zeroconf
     # REQUIREMENTS in homeassistant/auth/mfa_modules/totp.py and homeassistant/auth/mfa_modules/notify.py
     pyotp
     pyqrcode
