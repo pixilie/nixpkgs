@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+  id,
   importlib-metadata,
   keyring,
   packaging,
@@ -39,6 +40,7 @@ buildPythonPackage rec {
 
   dependencies =
     [
+      id
       keyring
       packaging
       pkginfo
