@@ -1,34 +1,40 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
   google-api-core,
   google-auth,
   grpcio,
+  grpcio-status,
   mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-core";
   version = "2.4.3";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-H6ti1xAoRLJ4/m3q068yQIsd8+sG9cfoY0y9QO3E2lM=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "python-cloud-core";
+    tag = "v${version}";
+    hash = "sha256-hYOtpHIHJVITrei6/0m1YteTog2WBWCUFCl/Zr6BLlc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-auth
     google-api-core
   ];
 
   optional-dependencies = {
-    grpc = [ grpcio ];
+    grpc = [
+      grpcio
+      grpcio-status
+    ];
   };
 
   nativeCheckInputs = [
