@@ -37,11 +37,6 @@ buildPythonPackage rec {
     "ignore::DeprecationWarning"
   ];
 
-  disabledTests = [
-    # ModuleNotFoundError: No module named 'google.type'
-    "test_unwrapped_enum_fields"
-  ];
-
   pythonImportsCheck = [ "proto" ];
 
   meta = with lib; {
