@@ -4,6 +4,7 @@
   fetchFromGitHub,
   aiohttp,
   pytestCheckHook,
+  pytest-aiohttp,
   setuptools,
 }:
 
@@ -21,15 +22,25 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    aiohttp
-  ];
+  dependencies = [ aiohttp ];
 
   pythonImportsCheck = [ "aiohttp_cors" ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-aiohttp
   ];
+
+  disabledTests = [
+    # async def functions are not natively supported and have been skipped.
+    "test_main"
+    "test_defaults"
+    "test_raises_forbidden_when_config_not_found"
+    "test_raises_when_handler_not_extend"
+  ];
+
+  # interactive browser tests using selenium
+  disabledTestPaths = [ "tests/integration" ];
 
   meta = with lib; {
     changelog = "https://github.com/aio-libs/aiohttp-cors/blob/${src.tag}/CHANGES.rst";
