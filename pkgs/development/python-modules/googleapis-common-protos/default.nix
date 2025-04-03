@@ -31,6 +31,14 @@ buildPythonPackage rec {
   # does not contain tests
   doCheck = false;
 
+  pythonImportsCheck = [
+    "google.api"
+    "google.logging"
+    "google.longrunning"
+    "google.rpc"
+    "google.type"
+  ];
+
   meta = with lib; {
     description = "Common protobufs used in Google APIs";
     homepage = "https://github.com/googleapis/python-api-common-protos";
